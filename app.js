@@ -55,7 +55,7 @@ var url = req.url;
     fetchMovieData(res);
     res.writeHead(200,{'Content-Type': 'application/json'});
             res.write( JSON.stringify({
-               countUpdated : 'movieData.Search.length'
+               countUpdated : true
             }));
  }    
 }).listen(3000, function(){
