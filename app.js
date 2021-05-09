@@ -7,62 +7,54 @@ const app = express()
 const port = process.env.PORT || 3000
 
 const client = new Client({
-  cloud: {
-    id: elasticConfig.cloudID
-  },
-  auth: {
-    username: elasticConfig.username,
-    password: elasticConfig.password
-  }
+    cloud: {
+        id: elasticConfig.cloudID
+    },
+    auth: {
+        username: elasticConfig.username,
+        password: elasticConfig.password
+    }
 })
 
-
-
 app.get('/', (req, res) => {
-  res.send('app up and running ')
+    res.send('app up and running ')
 })
 
 app.get('/refresh', (req, res) => {
     fetchMovieData()
     res.send('refresh completed')
-  })
-  
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
 })
+
+function fetchMovieData() {
+    request('http://www.omdbapi.com/?apikey=9030182c&s=space&y=2001', function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            let movieData = JSON.parse(body);
+            movieData.Search.forEach(function (element, index) {
+                request('http://www.omdbapi.com/?apikey=9030182c&i=' + element.imdbID, function (error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        run(JSON.parse(body));
+                    }
+                })
+            });
+        }
+    })
+}
 
 async function run(movieDetails) {
     await client.index({
         index: 'movie_database',
         id: movieDetails.imdbID,
         body: {
-        title: movieDetails.Title,
-        director: movieDetails.Director,
-        plot: movieDetails.Plot,
-        poster: movieDetails.Poster
+            title: movieDetails.Title,
+            director: movieDetails.Director,
+            plot: movieDetails.Plot,
+            poster: movieDetails.Poster
         }
     })
 }
 
-    
 
-function fetchMovieData(){
-    request('http://www.omdbapi.com/?apikey=9030182c&s=space&y=2001', function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            let movieData = JSON.parse(body);
-            movieData.Search.forEach(function(element, index){
-                request( 'http://www.omdbapi.com/?apikey=9030182c&i='+element.imdbID, function(error,response, body){
-                    if(!error && response.statusCode == 200){
-                        run(JSON.parse(body));
-                    }
-                })
-            });
-            
-
-            
-
-        } 
-    })
-}
+app.listen(port, () => {
+    console.log(`Example app listening at ${port}`)
+})
 
