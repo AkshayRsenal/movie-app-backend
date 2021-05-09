@@ -1,8 +1,10 @@
-const http = require('http');
 const { Client } = require('@elastic/elasticsearch')
 const config = require('config');
 const request = require('request');
 const elasticConfig = config.get('elastic');
+const express = require('express')
+const app = express()
+const port = 3000
 
 const client = new Client({
   cloud: {
@@ -12,6 +14,22 @@ const client = new Client({
     username: elasticConfig.username,
     password: elasticConfig.password
   }
+})
+
+
+
+app.get('/', (req, res) => {
+  res.send('app up and running ')
+})
+
+app.get('/refresh', (req, res) => {
+    fetchMovieData()
+    res.send('refresh completed')
+  })
+  
+
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`)
 })
 
 async function run(movieDetails) {
@@ -48,23 +66,3 @@ function fetchMovieData(){
     })
 }
 
-
-http.createServer(function (req, res) {
-var url = req.url;
- if(url ==='/movies'){
-    fetchMovieData(res);
-    res.writeHead(200,{'Content-Type': 'application/json'});
-            res.write( JSON.stringify({
-               countUpdated : true
-            }));
- }
- if(url ==='/test'){
-
-    res.writeHead(200,{'Content-Type': 'application/json'});
-            res.write( JSON.stringify({
-               testCompleted : true
-            }));
- }   
-}).listen(3000, function(){
-    console.log("server start at port 3000"); //the server object listens on port 3000
-   });
