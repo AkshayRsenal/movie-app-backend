@@ -4,7 +4,7 @@ const request = require('request');
 const elasticConfig = config.get('elastic');
 const express = require('express')
 const app = express()
-const port = 3000
+const port = process.env.PORT || 3000
 
 const client = new Client({
   cloud: {
