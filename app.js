@@ -57,7 +57,14 @@ var url = req.url;
             res.write( JSON.stringify({
                countUpdated : true
             }));
- }    
+ }
+ if(url ==='/test'){
+
+    res.writeHead(200,{'Content-Type': 'application/json'});
+            res.write( JSON.stringify({
+               testCompleted : true
+            }));
+ }   
 }).listen(3000, function(){
     console.log("server start at port 3000"); //the server object listens on port 3000
    });
