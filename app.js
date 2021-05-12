@@ -32,7 +32,7 @@ function fetchMovieData() {
             movieData.Search.forEach(function (element, index) {
                 request('http://www.omdbapi.com/?apikey=9030182c&i=' + element.imdbID, function (error, response, body) {
                     if (!error && response.statusCode == 200) {
-                        console.log(JSON.parse(body));
+                        run(JSON.parse(body));
                     }
                 })
             });
@@ -40,6 +40,18 @@ function fetchMovieData() {
     })
 }
 
+async function run(movieDetails) {
+    await client.index({
+        index: 'movie_database',
+        id: movieDetails.imdbID,
+        body: {
+            title: movieDetails.Title,
+            director: movieDetails.Director,
+            plot: movieDetails.Plot,
+            poster: movieDetails.Poster
+        }
+    })
+}
 
 
 app.listen(port, () => {
