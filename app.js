@@ -53,7 +53,6 @@ async function run(movieDetails) {
     })
 }
 
-
 app.listen(port, () => {
     console.log(`Example app listening at ${port}`)
 })
