@@ -1,7 +1,7 @@
 {
-    "elastic": {
-      "cloudID": "dummy",
-      "username": "dummy",
-      "password": "dummy"
-    }
+  "elastic": {
+    "cloudID": "dummy",
+    "username": "dummy",
+    "password": "dummy"
   }
+}
