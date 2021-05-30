@@ -12,7 +12,7 @@ describe("Initializing Tests", ()=>{
     console.log( "This part executes once before all tests" );
 })
 
-describe("/refresh [ROUTE]", function(){
+describe("[Test movie-app-backend] /refresh [Routing]", function(){
     it('Check if data is refreshed on Elasticsearch', (done)=>{
         chai.request(mainjs)
         .get('/refresh')
