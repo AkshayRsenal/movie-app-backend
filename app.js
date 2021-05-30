@@ -16,8 +16,8 @@ const client = new Client({
     }
 })
 
-app.get('/', (req, res) => {
-    res.send('app up and running ')
+app.get('/', ( req, res) => {
+    res.send('app up and running')
 })
 
 app.get('/refresh', (req, res) => {
@@ -57,3 +57,4 @@ app.listen(port, () => {
     console.log(`Example app listening at ${port}`)
 })
 
+module.exports = app;  // for testing purpose
